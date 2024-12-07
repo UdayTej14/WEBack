@@ -27,13 +27,12 @@ exports.getRecipeById = async (req, res) => {
 };
 // Search for recipes by title (partial match)
 exports.searchRecipes = async (req, res) => {
-   const {query} = req.query;
+   const { query } = req.query;
 
    try {
-      const recipes = await Recipe.find().where('title').regex(new RegExp(query, 'i'));
+      const recipes = await Recipe.find({ title: { $regex: query, $options: 'i' } });
       res.json(recipes);
    } catch (error) {
-      console.log(error);
       res.status(500).json({ message: 'Error searching for recipes', error });
    }
 };
