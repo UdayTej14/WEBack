@@ -1,3 +1,5 @@
+
+
 // backend/controllers/recipeController.js
 const Recipe = require('../models/Recipe');
 
@@ -35,5 +37,39 @@ exports.searchRecipes = async (req, res) => {
    } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Error searching for recipes', error });
+   }
+};
+
+exports.addRecipe = async (req, res) => {
+   const {
+      title,
+      description,
+      ingredients,
+      instructions,
+      cookingTime,
+      prepTime,
+      servings,
+      imageURL,
+      categories,
+   } = req.body;
+
+   try {
+      const newRecipe = new Recipe({
+         title,
+         description,
+         ingredients,
+         instructions,
+         cookingTime,
+         prepTime,
+         servings,
+         imageURL,
+         categories,
+      });
+
+      const savedRecipe = await newRecipe.save();
+      res.status(201).json({ message: 'Recipe added successfully', recipe: savedRecipe });
+   } catch (error) {
+      console.error('Error adding recipe:', error);
+      res.status(500).json({ message: 'Error adding recipe', error });
    }
 };
